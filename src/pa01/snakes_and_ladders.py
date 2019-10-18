@@ -24,19 +24,16 @@ def single_game(num_players):
     player = create_players(num_players)
     has_won = False
     winner_moves = 0
-    # print(player)
     # Initiate a game
     while not has_won:
         # Initiate a round of the game
         for p in range(num_players):
             player[p][0] += rd.randint(1, 6)
             player[p][1] += 1
-            # print(player)
             # checks if the players are at a ladder
             if player[p][0] in chutes_and_ladders():
                 player[p][0] = chutes_and_ladders()[player[p][0]]
                 player[p][1] += 1
-                # print(player)
             # checks if some player passed the 90th square
             elif player[p][0] > 90:
                 winner_moves = player[p][1]
@@ -56,17 +53,15 @@ def chutes_and_ladders():
     }
 
 
-# noinspection PyUnusedLocal
 def create_players(num_players):
     """
     Function to create a list with score and moves of each player
     :param num_players: Number of players in the game
     :return: score and moves of each player
     """
-    return [[0, 0] for i in range(num_players)]
+    return [[0, 0] for _ in range(num_players)]
 
 
-# noinspection PyShadowingNames
 def multiple_games(num_games, num_players):
     """
     Returns durations of a number of games.
