@@ -28,7 +28,7 @@ Setup
    -  adds an initial ``chutes.py`` file
    -  commits that file
    -  pushes her changes to GitHub
-   -  if Pia's repository is private, then she must add Ahmed as a
+   -  if Pia's repository is private, then she must add Ahmed as a 
       colllaborator
 
 2. Pia gives her partner, Ahmed, read access to her (if it is private)
@@ -90,7 +90,7 @@ Submission
    -  The programming partner approves the PR to confirm that she/he is
       co-author and agrees with submission.
 
-**Deadline for submission: Friday, October 18, 14.00.**
+**Deadline for submission: Tuesday, October 22nd, 14.00.**
 
 Note
 ^^^^
@@ -115,7 +115,7 @@ Code inspection requirements
 
 To be approved, your code must pass code inspection in PyCharm without
 any warning except spelling errors when executing
-To make sure that code is tested properly, ensure that the following
+To make sure that code is tested properly, ensure that the following 
 settings are in place in Settings/Parameters
 
 -  ``Editor > Code Style``: ``Right margin (columns)`` is set to ``79``
@@ -222,7 +222,7 @@ Your program shall
    def single_game(num_players):
        """
        Returns duration of single game.
-
+       
        Arguments
        ---------
        num_players : int
@@ -244,7 +244,7 @@ Your program shall
            Number of games to play
        num_players : int
            Number of players in the game
-
+       
        Returns
        -------
        num_moves : list
@@ -263,7 +263,7 @@ Your program shall
            Number of players in the game
        seed : int
            Seed used to initialise the random number generator
-
+       
        Returns
        -------
        num_moves : list
@@ -298,3 +298,4 @@ Hints
    look at the documentation for this function and think a little about
    where you want to place borders of bins. Histograms with a large
    number of bins often look better if you use ``histtype='step'``
+
