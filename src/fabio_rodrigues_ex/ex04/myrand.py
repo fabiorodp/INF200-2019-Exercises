@@ -64,9 +64,14 @@ class ListRand:
         return next(self.iter_list)
 
 
-a = LCGRand(346)
-print(a.rand(), a.rand())
+if __name__ == '__main__':
 
-c = [1, 2]
-b = ListRand(c)
-print(b.rand(), b.rand())
+    a, b = 346, [4, 5, 29, 11]
+
+    # instantiate at least one generator of each class
+    c1 = LCGRand(a)
+    c2 = ListRand(b)
+
+    # print a few numbers from each
+    print(c1.rand(), c1.rand(), c1.rand(), c1.rand(), c1.rand())
+    print(c2.rand(), c2.rand(), c2.rand(), c2.rand())
