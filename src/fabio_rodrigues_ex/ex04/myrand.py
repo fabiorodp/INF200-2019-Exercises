@@ -3,9 +3,6 @@
 __author__ = 'Fábio Rodrigues Pereira'
 __email__ = 'faro@nmbu.no'
 
-"""The main program shall instantiate at least one generator of each 
-class and print a few numbers from each."""
-
 
 class LCGRand:
     """
@@ -16,15 +13,22 @@ class LCGRand:
     The constructor takes a single argument,
     the seed (in addition to self).
     """
+    a = 7 ** 5
+    m = 2 ** 31 - 1
+
     def __init__(self, seed):
-        pass
+        self.seed_list = [seed]
+        self.index = 0
 
     def rand(self):
         """
         Returns the next random number
         Should not take any arguments except self
         """
-        pass
+        self.seed_list.append(LCGRand.a * self.seed_list[self.index] %
+                              LCGRand.m)
+        self.index += 1
+        return self.seed_list[self.index]
 
 
 class ListRand:
@@ -36,12 +40,33 @@ class ListRand:
     It shall raise a RuntimeError if rand() is called after the
     last number in the list has been delivered.
     """
-    def __init__(self):
-        pass
+
+    def __init__(self, __list):
+        self.__list = __list
+        self.iter_list = iter(self.__list)
+        self.__index = 0
 
     def rand(self):
         """
         Returns the next random number
         Should not take any arguments except self
         """
-        pass
+
+        """
+        if list_num < 0:
+            raise RuntimeError('Method called after the last number in '
+                               'the list has been delivered.')
+        """
+        self.__index += 1
+        if self.__index > len(self.__list):
+            raise RuntimeError('Method called after the last number in '
+                               'the list has been delivered.')
+        return next(self.iter_list)
+
+
+a = LCGRand(346)
+print(a.rand(), a.rand())
+
+c = [1, 2]
+b = ListRand(c)
+print(b.rand(), b.rand())
