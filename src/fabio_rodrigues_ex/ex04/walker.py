@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from random import randint
 
 __author__ = 'Fábio Rodrigues Pereira'
 __email__ = 'faro@nmbu.no'
@@ -12,7 +13,10 @@ class Walker:
 
     def move(self):
         """take one step"""
-        self.x.append(self.x[self.steps] + 1)
+        if randint(1, 2) == 1:
+            self.x.append(self.x[self.steps] + 1)
+        else:
+            self.x.append(self.x[self.steps] - 1)
         self.steps += 1
 
     def is_at_home(self):
@@ -30,10 +34,21 @@ class Walker:
         total"""
         return self.steps
 
-    def walking_process(self):
-        pass
+
+def five_simulations(distance):
+    """Function to create 5 simulations"""
+    steps_home = []
+    for _ in range(0, 5):
+        w = Walker(0, distance)
+        while not w.is_at_home():
+            w.move()
+            if w.is_at_home():
+                steps_home.append(w.get_steps())
+    return steps_home
 
 
-
-
-
+if __name__ == '__main__':
+    distances = [1, 2, 5, 10, 20, 50, 100]
+    for i in distances:
+        print('Distance: {} -> Path lengths: {}'.format(
+            i, five_simulations(i)))
