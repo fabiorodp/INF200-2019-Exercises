@@ -21,9 +21,7 @@ class Walker:
 
     def is_at_home(self):
         """to check whether the student is at home"""
-        if self.x[self.steps] == self.home:
-            return True
-        return False
+        return self.x[self.steps] == self.home
 
     def get_position(self):
         """to access the students current position"""
@@ -42,8 +40,7 @@ def five_simulations(distance):
         w = Walker(0, distance)
         while not w.is_at_home():
             w.move()
-            if w.is_at_home():
-                steps_home.append(w.get_steps())
+        steps_home.append(w.get_steps())
     return steps_home
 
 
