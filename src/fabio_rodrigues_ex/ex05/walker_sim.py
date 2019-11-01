@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from random import randint
+import random as rd
 
 __author__ = 'Fábio Rodrigues Pereira'
 __email__ = 'faro@nmbu.no'
@@ -17,7 +17,7 @@ class Walker:
 
     def move(self):
         """Change coordinate by +1 or -1 with equal probability."""
-        if randint(1, 2) == 1:
+        if rd.randint(1, 2) == 1:
             self.x.append(self.x[self.steps] + 1)
         else:
             self.x.append(self.x[self.steps] - 1)
@@ -50,6 +50,7 @@ class Simulation:
         seed : int
             Random generator seed
         """
+        self.seed, self.start, self.home = seed, start, home
 
     def single_walk(self):
         """
@@ -61,6 +62,11 @@ class Simulation:
         int
             The number of steps taken
         """
+        rd.seed(self.seed)
+        single = Walker(self.start, self.home)
+        while not single.is_at_home():
+            single.move()
+        return single.get_steps()
 
     def run_simulation(self, num_walks):
         """
@@ -76,9 +82,10 @@ class Simulation:
         list[int]
             List with the number of steps per walk
         """
+        return [self.single_walk() for _ in range(0, num_walks)]
 
 
-def main_simulations():
+if __name__ == '__main__':
     """
     The main section of the script shall simulate
     -  20 walks from start 0 to home 10
@@ -87,8 +94,9 @@ def main_simulations():
         and *once* with seed value 54321
     -  print the resulting lists (six lists in total).
     """
-    pass
-
-
-if __name__ == '__main__':
-    main_simulations()
+    _start = [0, 0, 0, 10, 10, 10]
+    _home = [10, 10, 10, 0, 0, 0]
+    _seed = [12345, 12345, 54321, 12345, 12345, 54321]
+    for x in range(6):
+        w = Simulation(_start[x], _home[x], _seed[x])
+        print(w.run_simulation(20))
