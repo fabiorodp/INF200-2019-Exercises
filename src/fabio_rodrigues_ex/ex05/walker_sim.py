@@ -76,3 +76,19 @@ class Simulation:
         list[int]
             List with the number of steps per walk
         """
+
+
+def main_simulations():
+    """
+    The main section of the script shall simulate
+    -  20 walks from start 0 to home 10
+    -  20 walks from start 10 to home 0
+    -  for each of those cases simulate *twice* with seed value 12345
+        and *once* with seed value 54321
+    -  print the resulting lists (six lists in total).
+    """
+    pass
+
+
+if __name__ == '__main__':
+    main_simulations()
