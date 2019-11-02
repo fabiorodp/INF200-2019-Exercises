@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from walker_sim.py import Walker, Simulation
+from walker_sim import Walker, Simulation
+import random as rd
 
 __author__ = 'Fábio Rodrigues Pereira'
 __email__ = 'faro@nmbu.no'
@@ -21,6 +22,8 @@ class BoundedWalker(Walker):
         right_limit : int
             The right boundary  of walker movement
         """
+        super().__init__(start, home)
+        self.left_limit, self.right_limit = left_limit, right_limit
 
 
 class BoundedSimulation(Simulation):
@@ -41,6 +44,8 @@ class BoundedSimulation(Simulation):
         right_limit : int
             The right boundary  of walker movement
         """
+        super().__init__(start, home, seed)
+        self.left_limit, self.right_limit = left_limit, right_limit
 
 
 def main_simulations():
