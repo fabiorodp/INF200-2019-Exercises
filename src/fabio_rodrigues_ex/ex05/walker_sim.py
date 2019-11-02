@@ -12,8 +12,7 @@ class Walker:
         :param home: position of the walker's home
         """
         self.x = [start]
-        self.home = home
-        self.steps = 0
+        self.home, self.steps = home, 0
 
     def move(self):
         """Change coordinate by +1 or -1 with equal probability."""
@@ -97,6 +96,6 @@ if __name__ == '__main__':
     _start = [0, 0, 0, 10, 10, 10]
     _home = [10, 10, 10, 0, 0, 0]
     _seed = [12345, 12345, 54321, 12345, 12345, 54321]
-    for x in range(6):
+    for x in range(len(_start)):
         w = Simulation(_start[x], _home[x], _seed[x])
         print(w.run_simulation(20))
