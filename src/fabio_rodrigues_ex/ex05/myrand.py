@@ -13,22 +13,22 @@ class LCGRand:
     The constructor takes a single argument,
     the seed (in addition to self).
     """
-    a = 7 ** 5
-    m = 2 ** 31 - 1
+    a, m = 7 ** 5, 2 ** 31 - 1
 
     def __init__(self, seed):
-        self.seed_list = [seed]
-        self.index = 0
+        self.generator, self.infinite = seed, True
 
     def rand(self):
         """
         Returns the next random number
         Should not take any arguments except self
         """
-        self.seed_list.append(LCGRand.a * self.seed_list[self.index] %
-                              LCGRand.m)
-        self.index += 1
-        return self.seed_list[self.index]
+        self.generator *= LCGRand.a
+        self.generator %= LCGRand.m
+        return self.generator
+
+    def random_sequence(self, length):
+        return RandIter(self, length)
 
     def infinite_random_sequence(self):
         """
@@ -39,7 +39,8 @@ class LCGRand:
         int
             A random number.
         """
-        pass
+        while self.infinite:
+            yield self.rand()
 
 
 class RandIter:
@@ -70,7 +71,10 @@ class RandIter:
         RuntimeError
             If iter is called twice on the same RandIter object.
         """
-        pass
+        if self.num_generated_numbers is not None:
+            raise RuntimeError('__iter__ called twice')
+        self.num_generated_numbers = 0
+        return self
 
     def __next__(self):
         """
@@ -88,14 +92,9 @@ class RandIter:
         StopIteration
             If ``self.length`` random numbers are generated.
         """
-        pass
-
-
-random_number_generator = LCGRand(1)
-for rand in generator.random_sequence(10):
-    print(rand)
-
-for i, rand in generator.infinite_random_sequence():
-    print(f'The {i}-th random number is {rand}')
-    if i > 100:
-        break
+        if self.num_generated_numbers is None:
+            raise RuntimeError('__next__ called before __iter__')
+        if self.num_generated_numbers == self.length:
+            raise StopIteration
+        self.num_generated_numbers += 1
+        return self.generator.rand()
