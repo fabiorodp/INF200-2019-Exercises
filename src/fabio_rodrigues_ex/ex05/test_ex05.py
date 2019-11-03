@@ -2,7 +2,6 @@
 
 """
 Acceptance test suite for EX05.
-
 Your code should pass these tests before submission.
 """
 
@@ -91,4 +90,3 @@ def test_bounded_simulation():
     r = s.run_simulation(n_sim)
     assert len(r) == n_sim
     assert all(rs > 0 for rs in r)
-
