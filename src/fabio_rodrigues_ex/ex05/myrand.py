@@ -98,3 +98,14 @@ class RandIter:
             raise StopIteration
         self.num_generated_numbers += 1
         return self.generator.rand()
+
+
+if __name__ == '__main__':
+    generator = LCGRand(1)
+    for rand in generator.random_sequence(10):
+        print(rand)
+
+    for i, rand in enumerate(generator.infinite_random_sequence()):
+        print(f'The {i}-th random number is {rand}')
+        if i > 100:
+            break
