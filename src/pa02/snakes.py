@@ -22,13 +22,14 @@ class Board:
         (in case of a ladder) or backward (chute), to get to the correct
         position. If the player is not at the start of a chute or ladder,
         the method returns 0"""
-        return position - self.snakes_ladders[position] \
+        return self.snakes_ladders[position] - position \
             if position in self.snakes_ladders else 0
 
 
 class Player:
     """its subclasses manage information about player position,
     including information on which board a player lives"""
+
     def __init__(self):
         self.board = Board()
         self.position = 0
@@ -38,20 +39,33 @@ class Player:
         if necessary, a move up a ladder or down a chute.
         It does not return anything"""
         self.position += rd.randint(1, 6)
+        # print(self.position)
+        self.position += self.board.position_adjustment(self.position)
+        # print(self.position)
         if self.board.goal_reached(self.position):
-            raise StopIteration
-        elif self.position in self.board.snakes_ladders:
-            self.position += self.board.position_adjustment(
-                self.position)
+            # print(self.position)
+            raise RuntimeError('Player won the game')
 
 
 class ResilientPlayer(Player):
+    """When a resilient player slips down a chute, he will take extra
+    steps in the next move, in addition to the roll of the die. The
+    number of extra steps is provided as an argument to the constructor,
+    default is 1. Extra steps are taken immediately after the steps
+    prescribed by the die and before snakes and ladders are checked"""
+
     def __init__(self):
         super().__init__()
         self.extra_steps = 1
 
 
 class LazyPlayer(Player):
+    """After climbing a ladder, a lazy player drops a given number of
+    steps. The number of dropped steps is an optional argument to the
+    constructor, default is 1. The player never moves backward: if, e.g.,
+    the die cast results in 1 step and the player is to drop 3 steps,
+    the player does not move -2 steps but just stays in place"""
+
     def __init__(self):
         super().__init__()
         self.dropped_steps = 1
@@ -59,5 +73,6 @@ class LazyPlayer(Player):
 
 if __name__ == '__main__':
     p1 = Player()
-    p1.move()
-    print(p1.position)
+    while True:
+        p1.move()
+        # print('moved')
