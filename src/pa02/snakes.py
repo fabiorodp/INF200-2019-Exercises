@@ -11,12 +11,13 @@ class Board:
     CHUTES = [(24, 5), (33, 3), (42, 30), (56, 37), (64, 27),
               (74, 12), (87, 70)]
 
-    def __init__(self, ladders=LADDERS, chutes=CHUTES, goal=90):
+    def __init__(self, ladders=None, chutes=None, goal=90):
+        if chutes or ladders is None:
+            chutes, ladders = self.CHUTES, self.LADDERS
+
         self.goal = goal
-        self.chutes_ladders = {ladder[0]: ladder[1] for ladder in
-                               ladders}
-        self.chutes_ladders.update(
-            {chute[0]: chute[1] for chute in chutes})
+        self.chutes_ladders = {start: end for start, end in
+                               ladders + chutes}
 
     def goal_reached(self, position):
         """return true if it is passed a position at or beyond the
@@ -37,22 +38,20 @@ class Player:
     including information on which board a player lives"""
 
     def __init__(self, board):
-        self.board = board
-        self.position = 0
-        self.num_moves = 0
+        self.board, self.position, self.num_moves = board, 0, 0
 
     def move(self):
         """It implements a die cast, the following move and,
         if necessary, a move up a ladder or down a chute.
         It does not return anything"""
+        # Add die
         self.position += rd.randint(1, 6)
-        # print(self.position)
+
+        # New position: Add chute and ladder
         self.position += self.board.position_adjustment(self.position)
+
+        # Add move count
         self.num_moves += 1
-        # print(self.position)
-        #if self.board.goal_reached(self.position):
-            # print(self.position)
-         #   raise RuntimeError('Player won the game')
 
 
 class ResilientPlayer(Player):
@@ -64,16 +63,25 @@ class ResilientPlayer(Player):
 
     def __init__(self, board, extra_steps=1):
         super().__init__(board)
-        self.extra_steps = extra_steps
-        self.extra_after_sliding = False
+        self.extra_steps, self.slided = extra_steps, False
 
     def move(self):
-        prev_pos = self.position
-        steps = self.extra_steps if self.extra_after_sliding else 0
-        new_pos = self.position + rd.randint(1, 6) + steps
-        self.position = self.board.position_adjustment(new_pos)
-        if prev_pos < self.position:
-            self.extra_after_sliding = False
+        # Check if slided is true and get the extra steps
+        num_extra = self.extra_steps if self.slided else 0
+
+        # New position: Add die + extra steps (if applicable)
+        self.position += rd.randint(1, 6) + num_extra
+
+        # Save the position
+        saved_pos = self.position
+
+        # Add chute and ladder
+        self.position += self.board.position_adjustment(self.position)
+
+        # self.slided for next round: True if got the chute, else False
+        self.slided = True if saved_pos > self.position else False
+
+        # add move count
         self.num_moves += 1
 
 
@@ -86,17 +94,25 @@ class LazyPlayer(Player):
 
     def __init__(self, board, dropped_steps=1):
         super().__init__(board)
-        self.dropped_steps = dropped_steps
-        self.drops_after_climbing = False
+        self.dropped_steps, self.climbed = dropped_steps, False
 
     def move(self):
-        prev_pos = self.position
-        dropped = self.dropped_steps if self.drops_after_climbing else 0
-        new_dropped_pos = self.position + max(0, rd.randint(1,
-                                                            6) - dropped)
-        self.position = self.board.position_adjustment(new_dropped_pos)
-        if prev_pos < self.position:
-            self.drops_after_climbing = False
+        # Check if climbed is true and get the dropped steps
+        num_dropped = self.dropped_steps if self.climbed else 0
+
+        # New position: Add die + drop steps (if applicable)
+        self.position += max(0, rd.randint(1, 6) - num_dropped)
+
+        # Save the position
+        saved_pos = self.position
+
+        # Add chute and ladder
+        self.position = self.board.position_adjustment(self.position)
+
+        # self.climbed for next round: True if got the snake, else False
+        self.climbed = True if saved_pos < self.position else False
+
+        # add move count
         self.num_moves += 1
 
 
@@ -135,9 +151,8 @@ class Simulation:
         Returns a dict mapping player classes to number of players.
         """
 
-        return {player_type.__name__:
-                    self.player_field.count(player_type)
-                for player_type in frozenset(self.player_field)}
+        return {player_type.__name__: self.player_field.count(
+            player_type) for player_type in frozenset(self.player_field)}
 
     def winners_per_type(self):
         """
@@ -150,17 +165,18 @@ class Simulation:
 
     def durations_per_type(self):
         """
-        Returns dict mapping winner type to list of game durations for type.
+        Returns dict mapping winner type to list of game durations for
+        type.
         """
 
-        return {player_type: [d for d, t in self.results if t == player_type]
-                for player_type in self.player_types}
+        return {
+            player_type: [d for d, t in self.results if t == player_type]
+            for player_type in self.player_types}
 
 
-
-
-#if __name__ == '__main__':
- #   p1 = Player()
-  #  while True:
-  #      p1.move()
-        # print('moved')
+if __name__ == '__main__':
+    """
+    p1 = Player(Board())
+    while True:
+        p1.move()
+        print('moved')"""
