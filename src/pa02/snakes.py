@@ -44,10 +44,10 @@ class Player:
         """It implements a die cast, the following move and,
         if necessary, a move up a ladder or down a chute.
         It does not return anything"""
-        # Add die
+        # New position: Add die
         self.position += rd.randint(1, 6)
 
-        # New position: Add chute and ladder
+        # Add chute and ladder
         self.position += self.board.position_adjustment(self.position)
 
         # Add move count
@@ -107,76 +107,10 @@ class LazyPlayer(Player):
         saved_pos = self.position
 
         # Add chute and ladder
-        self.position = self.board.position_adjustment(self.position)
+        self.position += self.board.position_adjustment(self.position)
 
         # self.climbed for next round: True if got the snake, else False
         self.climbed = True if saved_pos < self.position else False
 
         # add move count
         self.num_moves += 1
-
-
-class Simulation:
-
-    def __init__(self, player_field, board=None, seed=123456,
-                 randomize_players=False):
-        if randomize_players:
-            rd.shuffle(player_field)
-        self.board = board if board else Board()
-        self.player_field = player_field
-        self.player_types = frozenset(
-            pc.__name__ for pc in player_field)
-        self.results = []
-
-    def single_game(self):
-        moves = 0
-        players = [player(self.board) for player in self.player_field]
-        while True:
-            moves += 1
-            for player in players:
-                player.move()
-                if self.board.goal_reached(player.position):
-                    return player.num_moves, type(player)
-        return moves
-
-    def run_simulation(self, num_games):
-        self.results = [self.single_game() for _ in range(num_games)]
-        return self.results
-
-    def get_results(self):
-        return self.results
-
-    def players_per_type(self):
-        """
-        Returns a dict mapping player classes to number of players.
-        """
-
-        return {player_type.__name__: self.player_field.count(
-            player_type) for player_type in frozenset(self.player_field)}
-
-    def winners_per_type(self):
-        """
-        Returns dict showing number of winners for each type of player.
-        """
-
-        winner_types = list(zip(*self.results))[1]
-        return {player_type: winner_types.count(player_type)
-                for player_type in self.player_types}
-
-    def durations_per_type(self):
-        """
-        Returns dict mapping winner type to list of game durations for
-        type.
-        """
-
-        return {
-            player_type: [d for d, t in self.results if t == player_type]
-            for player_type in self.player_types}
-
-
-if __name__ == '__main__':
-    """
-    p1 = Player(Board())
-    while True:
-        p1.move()
-        print('moved')"""
