@@ -7,14 +7,15 @@ Minimal set of compatibility tests for PA02.
 __author__ = 'Hans Ekkehard Plesser'
 __email__ = 'hans.ekkehard.plesser@nmbu.no'
 
+
 import chutes_simulation as cs
 import pytest
-
 
 class TestBoard:
     """
     Tests for Board class.
     """
+
     def test_constructor_default(self):
         """Default constructor callable."""
         b = cs.Board()
@@ -27,9 +28,7 @@ class TestBoard:
 
     def test_constructor_named_args(self):
         """Constructor with kw args callable."""
-        b = cs.Board(ladders=[(1, 4), (5, 16)],
-                     chutes=[(9, 2), (12, 3)],
-                     goal=90)
+        b = cs.Board(ladders=[(1, 4), (5, 16)], chutes=[(9, 2), (12, 3)], goal=90)
         assert isinstance(b, cs.Board)
 
     def test_goal_reached(self):
@@ -111,7 +110,7 @@ class TestSimulation:
         s = cs.Simulation([cs.Player, cs.Player])
         nos, wc = s.single_game()
         assert nos > 0
-        # assert wc == 'Player'
+        assert wc == 'Player'
 
     def test_run_simulation(self):
         """run_simulation() can be called"""
@@ -133,8 +132,7 @@ class TestSimulation:
         assert all(s > 0 and t == 'Player' for s, t in r)
 
     def test_players_per_type(self):
-        """player_per_type() returns dict mapping names to non-neg
-        numbers."""
+        """player_per_type() returns dict mapping names to non-neg numbers."""
         s = cs.Simulation([cs.Player, cs.LazyPlayer, cs.ResilientPlayer])
         p = s.players_per_type()
         assert all(k in ['Player', 'LazyPlayer', 'ResilientPlayer']
@@ -142,8 +140,7 @@ class TestSimulation:
         assert all(v >= 0 for v in p.values())
 
     def test_winners_per_type(self):
-        """winners_per_type() returns dict mapping names to non-neg
-        numbers."""
+        """winners_per_type() returns dict mapping names to non-neg numbers."""
         s = cs.Simulation([cs.Player, cs.LazyPlayer, cs.ResilientPlayer])
         s.run_simulation(10)
         w = s.winners_per_type()
