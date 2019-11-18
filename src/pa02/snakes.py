@@ -37,7 +37,7 @@ class Player:
     """its subclasses manage information about player position,
     including information on which board a player lives"""
 
-    def __init__(self, board):
+    def __init__(self, board=Board()):
         self.board, self.position, self.num_moves = board, 0, 0
 
     def move(self):
@@ -61,7 +61,7 @@ class ResilientPlayer(Player):
     default is 1. Extra steps are taken immediately after the steps
     prescribed by the die and before snakes and ladders are checked"""
 
-    def __init__(self, board, extra_steps=1):
+    def __init__(self, board=Board(), extra_steps=1):
         super().__init__(board)
         self.extra_steps, self.slided = extra_steps, False
 
@@ -92,7 +92,7 @@ class LazyPlayer(Player):
     the die cast results in 1 step and the player is to drop 3 steps,
     the player does not move -2 steps but just stays in place"""
 
-    def __init__(self, board, dropped_steps=1):
+    def __init__(self, board=Board(), dropped_steps=1):
         super().__init__(board)
         self.dropped_steps, self.climbed = dropped_steps, False
 
