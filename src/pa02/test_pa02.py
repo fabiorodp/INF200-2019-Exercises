@@ -26,7 +26,7 @@ class TestResilientPlayer:
 
 
 class TestLazyPlayer:
-    def test_resilient_player_got_chute(self):
+    def test_lazy_player_got_ladder(self):
         """We test here if the ladder and climbed in
         LazyPlayer(Board()) are functioning"""
         ladder = [40, 10, 52, 62, 79, 82, 85]
