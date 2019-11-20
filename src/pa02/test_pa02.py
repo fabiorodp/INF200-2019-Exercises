@@ -23,3 +23,24 @@ class TestResilientPlayer:
             game_ended = False if not got_chute else True
         assert position in chute
         assert slided
+
+
+class TestLazyPlayer:
+    def test_resilient_player_got_chute(self):
+        """We test here if the ladder and climbed in
+        LazyPlayer(Board()) are functioning"""
+        ladder = [40, 10, 52, 62, 79, 82, 85]
+        got_ladder, game_ended, position, climbed = \
+            False, False, 0, False
+        while not got_ladder:
+            p = cs.LazyPlayer(cs.Board())
+            while not game_ended:
+                if position in ladder and climbed:
+                    got_ladder, game_ended = True, True
+                else:
+                    p.move()
+                    position, climbed = p.position, p.climbed
+                    game_ended = p.board.goal_reached(position)
+            game_ended = False if not got_ladder else True
+        assert position in ladder
+        assert climbed
