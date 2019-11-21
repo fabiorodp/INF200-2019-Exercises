@@ -44,3 +44,17 @@ class TestLazyPlayer:
             game_ended = False if not got_ladder else True
         assert position in ladder
         assert climbed
+
+    def test_lazy_player_not_stepped_back(self):
+        """We test here if the lazy player ever step back,
+        except when take a chute"""
+        chute = [5, 3, 30, 37, 27, 12, 70]
+        game_ended, prev_position, stepped_back = False, 0, False
+        p = cs.LazyPlayer(cs.Board())
+        while not game_ended:
+            prev_position = p.position
+            p.move()
+            if p.position not in chute and p.position < prev_position:
+                stepped_back, game_ended = True, True
+            game_ended = p.board.goal_reached(p.position)
+        assert not stepped_back
