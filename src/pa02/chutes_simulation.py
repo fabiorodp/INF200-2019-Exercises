@@ -12,9 +12,10 @@ class Board:
               (74, 12), (87, 70)]
 
     def __init__(self, ladders=None, chutes=None, goal=90):
-        if chutes or ladders is None:
-            chutes, ladders = self.CHUTES, self.LADDERS
-
+        if ladders is None:
+            ladders = self.LADDERS
+        if chutes is None:
+            chutes = self.CHUTES
         self.goal = goal
         self.chutes_ladders = {start: end for start, end in
                                ladders + chutes}
