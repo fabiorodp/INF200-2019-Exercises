@@ -5,6 +5,7 @@ __email__ = 'faro@nmbu.no'
 
 
 import numpy as np
+import numpy.linalg as la
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.exceptions import NotFittedError
 from sklearn.utils import check_random_state, check_X_y
@@ -136,11 +137,11 @@ class LogisticRegression(BaseEstimator, ClassifierMixin):
             A numpy random state object or a seed for a numpy random
             state object.
         """
-        # Your code here
-        pass
+        self.max_iter, self.learning_rate = max_iter, learning_rate
+        self.tol, self. random_state = tol, random_state
 
     def _has_converged(self, coef, X, y):
-        r"""Whether the gradient descent algorithm has converged.
+        """Whether the gradient descent algorithm has converged.
         Returns True if the norm of the gradient is smaller than
         ``self.tol``, mathematically, that is
         .. math::
@@ -164,11 +165,11 @@ class LogisticRegression(BaseEstimator, ClassifierMixin):
             True if the convergence criteria above is met, False
             otherwise.
         """
-        # Your code here
-        pass
+        return True if la.norm(logistic_gradient(coef, X, y)) < \
+                       self.tol else False
 
     def _fit_gradient_descent(self, coef, X, y):
-        r"""Fit the logisitc regression model to the data given initial
+        """Fit the logisitc regression model to the data given initial
         weights Gradient descent works by iteratively applying the
         following update
         rule
