@@ -3,7 +3,6 @@
 __author__ = 'Fábio Rodrigues Pereira'
 __email__ = 'faro@nmbu.no'
 
-
 import numpy as np
 import numpy.linalg as la
 from sklearn.base import BaseEstimator, ClassifierMixin
@@ -26,7 +25,7 @@ def sigmoid(z):
     sigmoidal_transformed_z : np.ndarray
         Transformed input.
     """
-    return 1 / (1 - np.exp(z))
+    return 1 / (1 - np.exp(-z))
 
 
 def predict_proba(coef, X):
@@ -50,7 +49,7 @@ def predict_proba(coef, X):
     p : np.ndarray(shape(n,))
         The predicted class probabilities.
     """
-    return sigmoid(-X @ coef)
+    return sigmoid(X @ coef)
 
 
 def logistic_gradient(coef, X, y):
@@ -116,7 +115,6 @@ class LogisticRegression(BaseEstimator, ClassifierMixin):
         A numpy random state object or a seed for a numpy random state
         object.
     """
-
     def __init__(self, max_iter=1000, tol=1e-5,
                  learning_rate=0.01, random_state=None):
         """Initialise a logistic regression instance.
@@ -138,7 +136,7 @@ class LogisticRegression(BaseEstimator, ClassifierMixin):
             state object.
         """
         self.max_iter, self.learning_rate = max_iter, learning_rate
-        self.tol, self. random_state = tol, random_state
+        self.tol, self.random_state = tol, random_state
 
     def _has_converged(self, coef, X, y):
         """Whether the gradient descent algorithm has converged.
@@ -198,8 +196,12 @@ class LogisticRegression(BaseEstimator, ClassifierMixin):
         coef : np.ndarray(shape=(n,))
             The logistic regression weights
         """
-        # Your code here
-        pass
+        i = 0
+        while i < self.max_iter and not self._has_converged(coef, X, y):
+            coef = coef - self.learning_rate * logistic_gradient(coef,
+                                                                 X, y)
+            i += 1
+        return coef
 
     def fit(self, X, y):
         """Fit a logistic regression model to the data.
@@ -288,6 +290,8 @@ if __name__ == "__main__":
 
     # Fit a logistic regression model to the X and y vector
     # Fill in your code here.
+    lr_model = LogisticRegression()
+    lr_model.fit(X, y)
     # Create a logistic regression object and fit it to the dataset
 
     # Print performance information
