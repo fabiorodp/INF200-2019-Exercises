@@ -57,18 +57,15 @@ def test_logistic_gradient(coef, X, y):
 @contextmanager
 def patch_with_mock(container, name):
     """Mock and patch an object and reset it upon exit.
-
     The specified object is replaced with a Mock class that wraps it.
     When the context manager is exited, then it is reset to how it was
     previously.
-
     Arguments
     ---------
     container : module or class
         Any object that the getattr and setattr functions can be called on.
     name : str
         The name of the object to patch
-
     Examples
     --------
     >>> import numpy as np
