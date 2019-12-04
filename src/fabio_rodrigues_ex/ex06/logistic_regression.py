@@ -163,8 +163,7 @@ class LogisticRegression(BaseEstimator, ClassifierMixin):
             True if the convergence criteria above is met, False
             otherwise.
         """
-        return True if la.norm(logistic_gradient(coef, X, y)) < \
-                       self.tol else False
+        return la.norm(logistic_gradient(coef, X, y)) < self.tol
 
     def _fit_gradient_descent(self, coef, X, y):
         """Fit the logisitc regression model to the data given initial
